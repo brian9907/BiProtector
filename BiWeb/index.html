@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>자전거 제어판</title>
+        <link href="./main.css" type="text/css" rel="stylesheet">
+    </head>
+    <body>
+        <script>
+            let req = new XMLHttpRequest();
+            req.onload = function() {
+                let res = req.responseText;
+                let latlng = res.split(',');
+                let lat = parseFloat(latlng[0]);
+                let lng = parseFloat(latlng[1]);
+
+                map.setCenter(new kakao.maps.LatLng(lat, lng));
+                marker.setMap(null);
+
+                marker = new kakao.maps.Marker({
+                    position: map.getCenter()
+                });
+                marker.setMap(map);
+            }
+            req.open("GET", "http://<DEVICE_IP>/");
+            req.send();
+        </script>
+        <!-- 지도를 표시할 div 입니다 -->
+        <div id="map"></div>
+
+        <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=<APIKEY>"></script>
+        <script>
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+                mapOption = { 
+                    center: new kakao.maps.LatLng(37.558542, 126.999032), // 지도의 중심좌표
+                    level: 3 // 지도의 확대 레벨
+                };
+
+            // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+            var map = new kakao.maps.Map(mapContainer, mapOption);
+
+            var marker = new kakao.maps.Marker({ 
+                // 지도 중심좌표에 마커를 생성합니다 
+                position: map.getCenter()
+            }); 
+            // 지도에 마커를 표시합니다
+            marker.setMap(map);
+        </script>
+    </body>
+</html>
